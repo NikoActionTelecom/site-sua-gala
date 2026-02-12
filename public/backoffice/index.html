@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backoffice - SUA LG Gala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/backoffice/css/admin.css">
+</head>
+<body>
+  <!-- Login -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="/img/logo-sua.png" alt="SUA LG" class="login-logo">
+        <p>Backoffice Inscriptions</p>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Identifiant</label>
+          <input type="text" id="username" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" required>
+        </div>
+        <div class="login-error" id="loginError" style="display:none">Identifiants incorrects</div>
+        <button type="submit" class="btn btn-primary btn-full">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div class="app" id="app" style="display:none">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="/img/logo-sua.png" alt="SUA LG" class="sidebar-logo">
+        <small>Backoffice</small>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Tableau de bord
+        </a>
+        <a href="#" class="nav-item" data-view="gala">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
+          Soirée de Gala
+        </a>
+        <a href="#" class="nav-item" data-view="mousquetaire">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Mousquetaires
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-sm btn-outline" id="logoutBtn">Déconnexion</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Top bar -->
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 id="viewTitle">Tableau de bord</h1>
+        </div>
+        <div class="topbar-right">
+          <a href="/" class="btn btn-sm btn-outline" target="_blank">Voir le site</a>
+        </div>
+      </div>
+
+      <!-- Dashboard view -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Total inscriptions</div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="stat-value" id="statGala">0</div>
+            <div class="stat-label">Soirée de Gala</div>
+          </div>
+          <div class="stat-card stat-blue">
+            <div class="stat-value" id="statMousq">0</div>
+            <div class="stat-label">Mousquetaires</div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-value" id="statConfirmes">0</div>
+            <div class="stat-label">Confirmés</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statEnAttente">0</div>
+            <div class="stat-label">En attente</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statPaiements">0</div>
+            <div class="stat-label">Paiements reçus</div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="stat-value" id="statPersonnes">0</div>
+            <div class="stat-label">Personnes Gala</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statMontant">0 &euro;</div>
+            <div class="stat-label">Montant total dons</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Mousquetaires par catégorie</h3>
+          </div>
+          <div class="cat-stats" id="catStats">
+            <div class="cat-stat">
+              <span class="cat-name">Porthos</span>
+              <div class="cat-bar"><div class="cat-fill" id="barPorthos" style="width:0%"></div></div>
+              <span class="cat-count" id="countPorthos">0</span>
+            </div>
+            <div class="cat-stat">
+              <span class="cat-name">Athos</span>
+              <div class="cat-bar"><div class="cat-fill" id="barAthos" style="width:0%"></div></div>
+              <span class="cat-count" id="countAthos">0</span>
+            </div>
+            <div class="cat-stat">
+              <span class="cat-name">Aramis</span>
+              <div class="cat-bar"><div class="cat-fill" id="barAramis" style="width:0%"></div></div>
+              <span class="cat-count" id="countAramis">0</span>
+            </div>
+            <div class="cat-stat">
+              <span class="cat-name">D'Artagnan</span>
+              <div class="cat-bar"><div class="cat-fill" id="barDartagnan" style="width:0%"></div></div>
+              <span class="cat-count" id="countDartagnan">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent registrations -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Dernières inscriptions</h3>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="recentTable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Statut</th>
+                  <th>Paiement</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="recentBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gala view -->
+      <div class="view" id="view-gala">
+        <div class="card">
+          <div class="card-header">
+            <h3>Inscriptions Soirée de Gala</h3>
+            <div class="card-actions">
+              <input type="text" class="search-input" placeholder="Rechercher..." data-type="gala">
+              <select class="filter-select" data-filter="statut" data-type="gala">
+                <option value="">Tous statuts</option>
+                <option value="en_attente">En attente</option>
+                <option value="confirme">Confirmé</option>
+                <option value="annule">Annulé</option>
+              </select>
+              <select class="filter-select" data-filter="paiement" data-type="gala">
+                <option value="">Tous paiements</option>
+                <option value="non_recu">Non reçu</option>
+                <option value="recu">Reçu</option>
+              </select>
+              <button class="btn btn-sm btn-outline" onclick="exportCSV('gala')">Export CSV</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Profil</th>
+                  <th>Nom Prénom</th>
+                  <th>Email</th>
+                  <th>Tél</th>
+                  <th>Pers.</th>
+                  <th>Don</th>
+                  <th>Statut</th>
+                  <th>Paiement</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="galaBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mousquetaire view -->
+      <div class="view" id="view-mousquetaire">
+        <div class="card">
+          <div class="card-header">
+            <h3>Inscriptions Mousquetaires d'Armandie</h3>
+            <div class="card-actions">
+              <input type="text" class="search-input" placeholder="Rechercher..." data-type="mousquetaire">
+              <select class="filter-select" data-filter="statut" data-type="mousquetaire">
+                <option value="">Tous statuts</option>
+                <option value="en_attente">En attente</option>
+                <option value="confirme">Confirmé</option>
+                <option value="annule">Annulé</option>
+              </select>
+              <button class="btn btn-sm btn-outline" onclick="exportCSV('mousquetaire')">Export CSV</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Profil</th>
+                  <th>Nom Prénom</th>
+                  <th>Entreprise</th>
+                  <th>Email</th>
+                  <th>Tél</th>
+                  <th>Catégorie</th>
+                  <th>Statut</th>
+                  <th>Paiement</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="mousqBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Détails inscription</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="/backoffice/js/admin.js"></script>
+</body>
+</html>
