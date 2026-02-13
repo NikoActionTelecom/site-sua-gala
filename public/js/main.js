@@ -115,30 +115,40 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const type = form.querySelector('input[name="type"]:checked').value;
-    const profil = form.querySelector('input[name="profil"]:checked').value;
-    const reglement = form.querySelector('input[name="reglement"]:checked')?.value || '';
+    const typeEl = form.querySelector('input[name="type"]:checked');
+    const profilEl = form.querySelector('input[name="profil"]:checked');
+    const reglementEl = form.querySelector('input[name="reglement"]:checked');
+
+    const type = typeEl ? typeEl.value : 'gala';
+    const profil = profilEl ? profilEl.value : 'particulier';
+    const reglement = reglementEl ? reglementEl.value : '';
+
+    const getValue = (sel) => {
+      const el = form.querySelector(sel);
+      return el ? el.value.trim() : '';
+    };
 
     const data = {
       type,
       profil,
-      nom: form.querySelector('#nom').value.trim(),
-      prenom: form.querySelector('#prenom').value.trim(),
-      raisonSociale: form.querySelector('#raisonSociale').value.trim(),
-      siret: form.querySelector('#siret').value.trim(),
-      email: form.querySelector('#email').value.trim(),
-      telephone: form.querySelector('#telephone').value.trim(),
-      adresse: form.querySelector('#adresse').value.trim(),
-      clubAffilie: form.querySelector('#clubAffilie').value.trim(),
+      nom: getValue('#nom'),
+      prenom: getValue('#prenom'),
+      raisonSociale: getValue('#raisonSociale'),
+      siret: getValue('#siret'),
+      email: getValue('#email'),
+      telephone: getValue('#telephone'),
+      adresse: getValue('#adresse'),
+      clubAffilie: getValue('#clubAffilie'),
       reglement,
-      commentaire: form.querySelector('#commentaire').value.trim(),
+      commentaire: getValue('#commentaire'),
     };
 
     if (type === 'gala') {
-      data.nombrePersonnes = form.querySelector('#nombrePersonnes').value;
-      data.montantDon = form.querySelector('#montantDonGala').value;
+      data.nombrePersonnes = getValue('#nombrePersonnes') || '2';
+      data.montantDon = getValue('#montantDonGala') || '2000';
     } else {
-      data.categorie = form.querySelector('input[name="categorie"]:checked')?.value || '';
+      const catEl = form.querySelector('input[name="categorie"]:checked');
+      data.categorie = catEl ? catEl.value : 'porthos';
     }
 
     const submitBtn = form.querySelector('[type="submit"]');
@@ -151,7 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      const result = await res.json();
+
+      let result;
+      try {
+        result = await res.json();
+      } catch (parseErr) {
+        alert('Erreur serveur. Veuillez réessayer.');
+        return;
+      }
 
       if (res.ok) {
         steps.forEach(s => s.classList.remove('active'));
@@ -162,7 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(msg);
       }
     } catch (err) {
-      alert('Erreur de connexion. Veuillez réessayer.');
+      console.error('Erreur submit:', err);
+      alert('Impossible de contacter le serveur. Vérifiez que le serveur est démarré (npm start).');
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = `
