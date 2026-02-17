@@ -259,6 +259,11 @@ app.get('/backoffice', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'backoffice', 'index.html'));
 });
 
+// Lien différencié Mousquetaires (redirige vers la page principale avec paramètre)
+app.get('/mousquetaires', (req, res) => {
+  res.redirect('/?type=mousquetaire');
+});
+
 app.listen(PORT, () => {
   console.log(`Serveur SUA Gala démarré sur http://localhost:${PORT}`);
   console.log(`Backoffice: http://localhost:${PORT}/backoffice`);

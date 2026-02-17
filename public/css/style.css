@@ -821,6 +821,32 @@ h1, h2, h3, h4 {
   font-weight: 600;
 }
 
+/* Bridge info message */
+.form-info-bridge {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+.bridge-icon {
+  flex-shrink: 0;
+  color: var(--gold);
+  margin-top: 2px;
+}
+.form-info-bridge p {
+  font-size: 0.85rem;
+  color: var(--gray-700);
+  line-height: 1.5;
+  margin: 0;
+}
+.form-info-bridge strong {
+  color: var(--navy);
+}
+
 .form-actions {
   display: flex;
   justify-content: space-between;

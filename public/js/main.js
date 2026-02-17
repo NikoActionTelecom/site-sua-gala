@@ -200,6 +200,44 @@ document.addEventListener('DOMContentLoaded', () => {
     showStep(1);
   });
 
+  // === Mode Mousquetaire uniquement (via /mousquetaires ou ?type=mousquetaire) ===
+  const urlParams = new URLSearchParams(window.location.search);
+  const modeParam = urlParams.get('type');
+
+  if (modeParam === 'mousquetaire') {
+    // Pré-sélectionner Mousquetaire
+    const mousqRadio = form.querySelector('input[name="type"][value="mousquetaire"]');
+    if (mousqRadio) {
+      mousqRadio.checked = true;
+      updateTypeFields();
+    }
+
+    // Masquer le choix Gala dans l'étape 1
+    const galaTypeCard = form.querySelector('input[name="type"][value="gala"]');
+    if (galaTypeCard) {
+      galaTypeCard.closest('.type-card').style.display = 'none';
+    }
+
+    // Adapter le titre et la grille
+    const stepTitle = form.querySelector('[data-step="1"] .form-step-title');
+    if (stepTitle) {
+      stepTitle.textContent = 'Devenir Mousquetaire d\'Armandie';
+    }
+    const typeCards = form.querySelector('.form-type-cards');
+    if (typeCards) {
+      typeCards.style.gridTemplateColumns = '1fr';
+    }
+
+    // Masquer l'encart bridge (plus nécessaire en mode direct)
+    const bridgeInfo = form.querySelector('.form-info-bridge');
+    if (bridgeInfo) {
+      bridgeInfo.style.display = 'none';
+    }
+
+    // Masquer les sections Gala (tarifs, héro soirée-centrée) si post-soirée
+    // Les sections restent visibles par défaut - à masquer manuellement si besoin
+  }
+
   // === Mousquetaire card links ===
   document.querySelectorAll('[data-cat]').forEach(btn => {
     btn.addEventListener('click', (e) => {
